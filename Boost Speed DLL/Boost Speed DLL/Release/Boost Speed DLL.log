@@ -1,0 +1,16 @@
+﻿  dllmain.cpp
+D:\Edit\Kodlama Projeler\Boost Speed DLL\Boost Speed DLL\Fonksiyonlar.h(35,23): warning C4018: '<': işaretli/işaretsiz uyuşmazlığı
+  ('/dllmain.cpp' kaynak dosyası derleniyor)
+  
+D:\Edit\Kodlama Projeler\Boost Speed DLL\Boost Speed DLL\Fonksiyonlar.h(30,60): warning C4390: ';': boş denetlenen deyim bulundu; amaçlanan bu muydu?
+  ('/dllmain.cpp' kaynak dosyası derleniyor)
+  
+D:\Edit\Kodlama Projeler\Boost Speed DLL\Boost Speed DLL\Temel Kod.h(71,23): warning C4244: '=': 'double' - 'float' dönüşümü; veri kaybı olabilir
+  ('/dllmain.cpp' kaynak dosyası derleniyor)
+  
+  Kod üretiliyor
+  2 of 91 functions ( 2.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
+  Kodun üretilmesi tamamlandı
+  Boost Speed DLL.vcxproj -> D:\Edit\Kodlama Projeler\Boost Speed DLL\Release\Boost Speed DLL.dll
