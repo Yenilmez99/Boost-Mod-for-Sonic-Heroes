@@ -41,21 +41,21 @@ int TemelKod() {
 	DWORD KullanSeciliKarakter = GetPointerAddress(hwnd_SonicHeroesTM, SonicHeroesAnaAdress, SeciliKarakterAdresi, SeciliKarakterOffseti);
 
 	while (true){
-		ReadProcessMemory(HandleSonicHeroes, (PBYTE*)KullanSeciliKarakter, &SeciliKarakter, sizeof(SeciliKarakter), 0);
-
-		if (SeciliKarakter==0){
-			break;
-
-		}
-
-		else{
-
-		}
-
-	}
-
-	while (true){
 		ReadProcessMemory(HandleSonicHeroes, (PBYTE*)KullanPause, &PauseBilgi, sizeof(PauseBilgi), 0);
+
+		while (true) {
+			ReadProcessMemory(HandleSonicHeroes, (PBYTE*)KullanSeciliKarakter, &SeciliKarakter, sizeof(SeciliKarakter), 0);
+
+			if (SeciliKarakter == 0) {
+				break;
+
+			}
+
+			else {
+
+			}
+
+		}
 
 		if (PauseBilgi != 1) {
 
@@ -70,6 +70,7 @@ int TemelKod() {
 					ReadProcessMemory(HandleSonicHeroes, (PBYTE*)KullanAnaHiz, &AnaHiz, sizeof(AnaHiz), 0);
 					AnaHizTick = sqrt(2916* AnaHiz);
 					HizTick = AnaHizTick + 1.0f;
+
 					if (HizTick>=270){
 						HizTick = 270;
 					}
