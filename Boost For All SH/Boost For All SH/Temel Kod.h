@@ -39,16 +39,16 @@ int TemelKod() {
 		}
 
 		else{
+			DWORD AnaHizAdresi = 0x005CE820;
+			vector<DWORD> AnaHizOffseti{ 0xDC };
+			DWORD KullanAnaHiz = GetPointerAddress(hwnd_SonicHeroesTM, SonicHeroesAnaAdress, AnaHizAdresi, AnaHizOffseti);
+
+			ReadProcessMemory(HandleSonicHeroes, (PBYTE*)KullanAnaHiz, &AnaHiz, sizeof(AnaHiz), 0);
 			
-			if (GetAsyncKeyState(VK_UP)!=0|| GetAsyncKeyState(VK_DOWN) != 0 || GetAsyncKeyState(VK_RIGHT) != 0 || GetAsyncKeyState(VK_LEFT) != 0 || GetAsyncKeyState(0x54) != 0 || GetAsyncKeyState(0x47) != 0 || GetAsyncKeyState(0x48) != 0 || GetAsyncKeyState(0x46) != 0){
+			if (AnaHiz != 0){
 				
 				if (GetAsyncKeyState(0x43)!=0){
 
-					DWORD AnaHizAdresi = 0x005CE820;
-					vector<DWORD> AnaHizOffseti{ 0xDC };
-					DWORD KullanAnaHiz = GetPointerAddress(hwnd_SonicHeroesTM, SonicHeroesAnaAdress, AnaHizAdresi, AnaHizOffseti);
-
-					ReadProcessMemory(HandleSonicHeroes, (PBYTE*)KullanAnaHiz, &AnaHiz, sizeof(AnaHiz), 0);
 					AnaHizTick = sqrt(2916* AnaHiz);
 					HizTick = AnaHizTick + 1.0f;
 					if (HizTick>=270){
