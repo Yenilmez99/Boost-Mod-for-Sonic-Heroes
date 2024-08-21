@@ -8,4 +8,4 @@ MS VC (Visual C++ Redistributable) 2015-2022 version is required for this mod (b
 
 To run the mod, Inject DLL into Sonic Heroes, enter a stage and press f2 and the mod will be activated.
 
-From here on, to use the boost, press the C key while moving forward (while pressing the Arrow Up or T key) and enjoy the boost :).
+From here on, to use the boost, press C while moving and enjoy the boost :).
