@@ -51,12 +51,11 @@ DWORD WINAPI MainCore(HMODULE hModule) {
     const float CoefficientOfX = 20 / (2.0f * 2.0f); // MaxAcceleration / TimeToMaxAcceleration^2
 
     HWND hwnd_SonicHeroesTM = FindWindowA(NULL, "SONIC HEROES(TM)");
-    if (hwnd_SonicHeroesTM == NULL)
-    {
-        return -1;
+
+    while (hwnd_SonicHeroesTM == NULL) {
+        hwnd_SonicHeroesTM = FindWindowA(NULL, "SONIC HEROES(TM)");
     }
-    else{
-    }
+
     DWORD ProcessIDSonicHeroes = NULL;
     GetWindowThreadProcessId(hwnd_SonicHeroesTM, &ProcessIDSonicHeroes);
     HANDLE HandleSonicHeroes = OpenProcess(PROCESS_ALL_ACCESS, FALSE, ProcessIDSonicHeroes);
