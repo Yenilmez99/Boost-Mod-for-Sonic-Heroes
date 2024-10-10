@@ -1,0 +1,9 @@
+﻿  dllmain.cpp
+D:\Edit\Kodlama Projeler\Sonic Heroes Boost Mod (Speed Characters)\Sonic Heroes Boost Mod (Speed Characters)\dllmain.cpp(40,23): warning C4018: '<': işaretli/işaretsiz uyuşmazlığı
+D:\Edit\Kodlama Projeler\Sonic Heroes Boost Mod (Speed Characters)\Sonic Heroes Boost Mod (Speed Characters)\dllmain.cpp(35,60): warning C4390: ';': boş denetlenen deyim bulundu; amaçlanan bu muydu?
+D:\Edit\Kodlama Projeler\Sonic Heroes Boost Mod (Speed Characters)\Sonic Heroes Boost Mod (Speed Characters)\dllmain.cpp(86,32): warning C4244: '=': 'double' - 'float' dönüşümü; veri kaybı olabilir
+  Kod üretiliyor
+  Previous IPDB not found, fall back to full compilation.
+  All 97 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Kodun üretilmesi tamamlandı
+  Sonic Heroes Boost Mod (Speed Characters).vcxproj -> D:\Edit\Kodlama Projeler\Sonic Heroes Boost Mod (Speed Characters)\Release\Sonic Heroes Boost Mod (Speed Characters).dll
