@@ -2,7 +2,7 @@ Adds Boost feature to Sonic Heroes
 
 Available for all characters
 
-You can use the releases with the Reloaded2 App
+Releases is Reloaded 2 Mod Loader File
 
 MS VC (Visual C++ Redistributable) 2015-2022 version is required for this mod (both x64 and x86)
 
