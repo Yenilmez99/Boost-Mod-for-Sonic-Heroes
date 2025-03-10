@@ -4,6 +4,10 @@
 #include <vector>
 #include <stdlib.h>
 #include <math.h>
+#include <Xinput.h>
+#include <string>
+#include <fstream>
+#include <sstream>
 #include "framework.h"
 
 DWORD GetModuleBaseAddress(TCHAR* lpszModuleName, DWORD pID) {
@@ -45,11 +49,58 @@ DWORD GetPointerAddress(HWND hwnd, DWORD gameBaseAddr, DWORD address, std::vecto
 }
 
 DWORD WINAPI MainCore(HMODULE hModule) {
-    bool RunStage = 0;
-    int ActiveCharacter = 0;
+    bool RunStage = 0, GamepadKeyPress = 0, isTrigger = 0;
+    int ButtonKey, ActiveCharacter;
+    BYTE TriggerKey;
     float Acceleration = 0.0f;
     float TimeTick = 0.0f;
-    const float CoefficientOfX = 20 / (2.0f * 2.0f); // MaxAcceleration / TimeToMaxAcceleration^2
+
+    float MaxAcceleration = 20.0f;
+    float TimeToMaxAcceleration = 2.0f;
+
+    std::ifstream File("Y99 Mods Config File.txt");
+    std::string Line;
+    short ReadKey = 12;
+    if (!File.is_open())
+        ReadKey = 12;
+    else {
+        for (int i = 0; i < 7; i++) {
+            std::getline(File, Line);
+            if (i == 1) {
+                std::stringstream ss(Line);
+                std::string Key;
+                ss >> Key >> ReadKey;
+            }
+            if (i == 2) {
+                std::stringstream ss(Line);
+                std::string Key;
+                ss >> Key >> MaxAcceleration;
+            }
+            if (i == 3) {
+                std::stringstream ss(Line);
+                std::string Key;
+                ss >> Key >> TimeToMaxAcceleration;
+            }
+        }
+        if (ReadKey <= 12 && ReadKey >= 1);
+        else
+            ReadKey = 12;
+
+        if (MaxAcceleration <= 100.0f && MaxAcceleration >= 0.5f);
+        else
+            MaxAcceleration = 20.0f;
+
+        if (TimeToMaxAcceleration <= 120.0f && TimeToMaxAcceleration >= 1.0f);
+        else
+            TimeToMaxAcceleration = 2.0f;
+    }
+    File.close();
+
+    const float CoefficientOfX = MaxAcceleration / (TimeToMaxAcceleration * TimeToMaxAcceleration); // MaxAcceleration / TimeToMaxAcceleration^2
+
+    XINPUT_STATE state;
+    DWORD dwResult;
+    BYTE rightTrigger;
 
     HWND hwnd_SonicHeroesTM = FindWindowA(NULL, "SONIC HEROES(TM)");
 
@@ -64,54 +115,110 @@ DWORD WINAPI MainCore(HMODULE hModule) {
     DWORD SonicHeroesMainAdress = GetModuleBaseAddress(_T(SonicHeroesGameModule), ProcessIDSonicHeroes);
 
     DWORD AccelerationMainAdress = 0x005CE820;
-    DWORD ActiveCharacterMainAdress = 0x006778AC;
+    DWORD ActiveCharacterMainAdress = 0x0064C268;
 
     std::vector<DWORD> AccelerationOffset{ 0xDC };
-    std::vector<DWORD> ActiveCharacterOffset{ 0x18, 0x148 };
+    std::vector<DWORD> ActiveCharacterOffset{ 0x140 };
 
-    while (true) {
+    DWORD ActiveCharacterAdress;
+    DWORD AccelerationAdress;
+
+    while (hwnd_SonicHeroesTM != NULL) {
         ReadProcessMemory(HandleSonicHeroes, (PBYTE*)0x007C6BD4, &RunStage, sizeof(bool), 0);
+
+        dwResult = XInputGetState(0, &state);
+        if (dwResult == ERROR_SUCCESS) {
+            switch (ReadKey) {
+            case 1:
+                isTrigger = 0;
+                ButtonKey = XINPUT_GAMEPAD_A;
+            case 2:
+                isTrigger = 0;
+                ButtonKey = XINPUT_GAMEPAD_B;
+            case 3:
+                isTrigger = 0;
+                ButtonKey = XINPUT_GAMEPAD_X;
+            case 4:
+                isTrigger = 0;
+                ButtonKey = XINPUT_GAMEPAD_Y;
+            case 5:
+                isTrigger = 0;
+                ButtonKey = XINPUT_GAMEPAD_LEFT_SHOULDER;
+            case 6:
+                isTrigger = 0;
+                ButtonKey = XINPUT_GAMEPAD_RIGHT_SHOULDER;
+            case 7:
+                isTrigger = 0;
+                ButtonKey = XINPUT_GAMEPAD_BACK;
+            case 8:
+                isTrigger = 0;
+                ButtonKey = XINPUT_GAMEPAD_START;
+            case 9:
+                isTrigger = 0;
+                ButtonKey = XINPUT_GAMEPAD_LEFT_THUMB;
+            case 10:
+                isTrigger = 0;
+                ButtonKey = XINPUT_GAMEPAD_RIGHT_THUMB;
+                break;
+            case 11:
+                isTrigger = 1;
+                TriggerKey = state.Gamepad.bLeftTrigger;
+                break;
+            case 12:
+                isTrigger = 1;
+                TriggerKey = state.Gamepad.bRightTrigger;
+                break;
+            default:
+                isTrigger = 1;
+                TriggerKey = state.Gamepad.bRightTrigger;
+                break;
+            }
+            if (isTrigger != 1) {
+                if ((state.Gamepad.wButtons & ButtonKey) != 0)
+                    GamepadKeyPress = 1;
+                else
+                    GamepadKeyPress = 0;
+            }
+            else {
+                if (TriggerKey != 0)
+                    GamepadKeyPress = 1;
+                else
+                    GamepadKeyPress = 0;
+            }
+
+        }
+        else
+            GamepadKeyPress = 0;
 
         if (RunStage == 0) { // Stage Run.
 
-            DWORD ActiveCharacterAdress = GetPointerAddress(hwnd_SonicHeroesTM, SonicHeroesMainAdress, ActiveCharacterMainAdress, ActiveCharacterOffset);
+            ActiveCharacterAdress = GetPointerAddress(hwnd_SonicHeroesTM, SonicHeroesMainAdress, ActiveCharacterMainAdress, ActiveCharacterOffset);
             ReadProcessMemory(HandleSonicHeroes, (PBYTE*)ActiveCharacterAdress, &ActiveCharacter, sizeof(int), 0);
 
             if (ActiveCharacter == 0) { // Select Speed Character.
 
-                DWORD AccelerationAdress = GetPointerAddress(hwnd_SonicHeroesTM, SonicHeroesMainAdress, AccelerationMainAdress, AccelerationOffset);
+                AccelerationAdress = GetPointerAddress(hwnd_SonicHeroesTM, SonicHeroesMainAdress, AccelerationMainAdress, AccelerationOffset);
                 ReadProcessMemory(HandleSonicHeroes, (PBYTE*)AccelerationAdress, &Acceleration, sizeof(float), 0);
 
-                TimeTick = sqrt(Acceleration / CoefficientOfX);
+                if (Acceleration > 0.01f) {
+                    TimeTick = sqrt(Acceleration / CoefficientOfX);
 
-                if (TimeTick >= 2.0f) { // TimeToMaxAcceleration
-                    TimeTick = 1.99f; //TimeToMaxAcceleration - 0.01f
-                }
-                else {
-                }
+                    if (TimeTick >= 2.0f) // TimeToMaxAcceleration
+                        TimeTick = 1.99f; //TimeToMaxAcceleration - 0.01f
 
-                TimeTick += 0.01f; // The program is approximately 100 frames per second so the time will increase by 0,01 seconds each time.
+                    TimeTick += 0.01f; // The program is approximately 100 frames per second so the time will increase by 0,01 seconds each time.
 
-                Acceleration = CoefficientOfX * TimeTick * TimeTick; // y = ax^2 -- MaxAcceleration = CoefficientOfX * Time^2
+                    Acceleration = CoefficientOfX * TimeTick * TimeTick; // y = ax^2 -- MaxAcceleration = CoefficientOfX * Time^2
 
-                if (GetAsyncKeyState(0x43)) {
-                    WriteProcessMemory(HandleSonicHeroes, (PBYTE*)AccelerationAdress, &Acceleration, sizeof(float), 0);
-                }
-                else {
+                    if (GetAsyncKeyState(0x43) || GamepadKeyPress)
+                        WriteProcessMemory(HandleSonicHeroes, (PBYTE*)AccelerationAdress, &Acceleration, sizeof(float), 0);
                 }
 
             }
-            else{
-            }
 
         }
-
-        else { // Stage Not Run.
-
-        }
-
         Sleep(10); // Waiting time of the code. Approximately 100 frames per second.
-
+        hwnd_SonicHeroesTM = FindWindowA(NULL, "SONIC HEROES(TM)");
     }
 
     return 0;
