@@ -132,30 +132,39 @@ DWORD WINAPI MainCore(HMODULE hModule) {
             case 1:
                 isTrigger = 0;
                 ButtonKey = XINPUT_GAMEPAD_A;
+                break;
             case 2:
                 isTrigger = 0;
                 ButtonKey = XINPUT_GAMEPAD_B;
+                break;
             case 3:
                 isTrigger = 0;
                 ButtonKey = XINPUT_GAMEPAD_X;
+                break;
             case 4:
                 isTrigger = 0;
                 ButtonKey = XINPUT_GAMEPAD_Y;
+                break;
             case 5:
                 isTrigger = 0;
                 ButtonKey = XINPUT_GAMEPAD_LEFT_SHOULDER;
+                break;
             case 6:
                 isTrigger = 0;
                 ButtonKey = XINPUT_GAMEPAD_RIGHT_SHOULDER;
+                break;
             case 7:
                 isTrigger = 0;
                 ButtonKey = XINPUT_GAMEPAD_BACK;
+                break;
             case 8:
                 isTrigger = 0;
                 ButtonKey = XINPUT_GAMEPAD_START;
+                break;
             case 9:
                 isTrigger = 0;
                 ButtonKey = XINPUT_GAMEPAD_LEFT_THUMB;
+                break;
             case 10:
                 isTrigger = 0;
                 ButtonKey = XINPUT_GAMEPAD_RIGHT_THUMB;
@@ -203,10 +212,10 @@ DWORD WINAPI MainCore(HMODULE hModule) {
                 if (Acceleration > 0.01f) {
                     TimeTick = sqrt(Acceleration / CoefficientOfX);
 
-                    if (TimeTick >= 2.0f) // TimeToMaxAcceleration
-                        TimeTick = 1.99f; //TimeToMaxAcceleration - 0.01f
+                    if (TimeTick >= TimeToMaxAcceleration) // TimeToMaxAcceleration
+                        TimeTick = TimeToMaxAcceleration - 0.016f; //TimeToMaxAcceleration - 0.016f
 
-                    TimeTick += 0.01f; // The program is approximately 100 frames per second so the time will increase by 0,01 seconds each time.
+                    TimeTick += 0.016f; // The program is approximately 60 frames per second so the time will increase by 0,016 seconds each time.
 
                     Acceleration = CoefficientOfX * TimeTick * TimeTick; // y = ax^2 -- MaxAcceleration = CoefficientOfX * Time^2
 
@@ -217,7 +226,7 @@ DWORD WINAPI MainCore(HMODULE hModule) {
             }
 
         }
-        Sleep(10); // Waiting time of the code. Approximately 100 frames per second.
+        Sleep(16); // Waiting time of the code. Approximately 60 frames per second.
         hwnd_SonicHeroesTM = FindWindowA(NULL, "SONIC HEROES(TM)");
     }
 
