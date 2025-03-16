@@ -10,6 +10,8 @@
 #include <sstream>
 #include "framework.h"
 
+#define KeyboardButtonKey 0x43
+
 DWORD GetModuleBaseAddress(TCHAR* lpszModuleName, DWORD pID) {
     DWORD dwModuleBaseAddress = 0;
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID);
@@ -48,17 +50,36 @@ DWORD GetPointerAddress(HWND hwnd, DWORD gameBaseAddr, DWORD address, std::vecto
     return pointeraddress += offsets.at(offsets.size() - 1);
 }
 
+std::string GetDllPath(std::string DLLName) {
+    HMODULE hModule = NULL;
+    char path[MAX_PATH];
+    std::string DLLPath = "";
+    LPCSTR DLLNameLPCSTR = DLLName.c_str();
+
+    GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_PIN, DLLNameLPCSTR, &hModule);
+    GetModuleFileNameA(hModule, path, MAX_PATH);
+    DLLPath = path;
+
+    if (DLLPath.find_last_of("\\/") != std::string::npos)
+        DLLPath = DLLPath.substr(0, DLLPath.find_last_of("\\/"));
+
+    return DLLPath;
+}
+
 DWORD WINAPI MainCore(HMODULE hModule) {
     bool RunStage = 0, GamepadKeyPress = 0, isTrigger = 0;
     int ButtonKey, ActiveCharacter;
     BYTE TriggerKey;
+    UINT8 Aura = NULL;
     float Acceleration = 0.0f;
     float TimeTick = 0.0f;
+    float TeamBlastBar = 0.0f;
 
     float MaxAcceleration = 20.0f;
     float TimeToMaxAcceleration = 2.0f;
 
-    std::ifstream File("Y99 Mods Config File.txt");
+    // Find DLL Location
+    std::ifstream File(GetDllPath("Sonic Heroes Boost Mod (Speed Characters).dll") + "\\Speed Character Boost Mod Config File.txt");
     std::string Line;
     short ReadKey = 12;
     if (!File.is_open())
@@ -116,93 +137,90 @@ DWORD WINAPI MainCore(HMODULE hModule) {
 
     DWORD AccelerationMainAdress = 0x005CE820;
     DWORD ActiveCharacterMainAdress = 0x0064C268;
+    DWORD AuraMainAdress = 0x0064B1B0;
 
     std::vector<DWORD> AccelerationOffset{ 0xDC };
     std::vector<DWORD> ActiveCharacterOffset{ 0x140 };
+    std::vector<DWORD> AuraOffset{ 0x1bd };
 
     DWORD ActiveCharacterAdress;
     DWORD AccelerationAdress;
+    DWORD AuraAddress;
+
+    dwResult = XInputGetState(0, &state);
+    if (dwResult == ERROR_SUCCESS) {
+        switch (ReadKey) {
+        case 1:
+            isTrigger = 0;
+            ButtonKey = XINPUT_GAMEPAD_A;
+            break;
+        case 2:
+            isTrigger = 0;
+            ButtonKey = XINPUT_GAMEPAD_B;
+            break;
+        case 3:
+            isTrigger = 0;
+            ButtonKey = XINPUT_GAMEPAD_X;
+            break;
+        case 4:
+            isTrigger = 0;
+            ButtonKey = XINPUT_GAMEPAD_Y;
+            break;
+        case 5:
+            isTrigger = 0;
+            ButtonKey = XINPUT_GAMEPAD_LEFT_SHOULDER;
+            break;
+        case 6:
+            isTrigger = 0;
+            ButtonKey = XINPUT_GAMEPAD_RIGHT_SHOULDER;
+            break;
+        case 7:
+            isTrigger = 0;
+            ButtonKey = XINPUT_GAMEPAD_BACK;
+            break;
+        case 8:
+            isTrigger = 0;
+            ButtonKey = XINPUT_GAMEPAD_START;
+            break;
+        case 9:
+            isTrigger = 0;
+            ButtonKey = XINPUT_GAMEPAD_LEFT_THUMB;
+            break;
+        case 10:
+            isTrigger = 0;
+            ButtonKey = XINPUT_GAMEPAD_RIGHT_THUMB;
+            break;
+        case 11:
+            isTrigger = 1;
+            TriggerKey = state.Gamepad.bLeftTrigger;
+            break;
+        case 12:
+            isTrigger = 1;
+            TriggerKey = state.Gamepad.bRightTrigger;
+            break;
+        default:
+            isTrigger = 1;
+            TriggerKey = state.Gamepad.bRightTrigger;
+            break;
+        }
+    }
+    else
+        GamepadKeyPress = 0;
 
     while (hwnd_SonicHeroesTM != NULL) {
         ReadProcessMemory(HandleSonicHeroes, (PBYTE*)0x007C6BD4, &RunStage, sizeof(bool), 0);
 
-        dwResult = XInputGetState(0, &state);
-        if (dwResult == ERROR_SUCCESS) {
-            switch (ReadKey) {
-            case 1:
-                isTrigger = 0;
-                ButtonKey = XINPUT_GAMEPAD_A;
-                break;
-            case 2:
-                isTrigger = 0;
-                ButtonKey = XINPUT_GAMEPAD_B;
-                break;
-            case 3:
-                isTrigger = 0;
-                ButtonKey = XINPUT_GAMEPAD_X;
-                break;
-            case 4:
-                isTrigger = 0;
-                ButtonKey = XINPUT_GAMEPAD_Y;
-                break;
-            case 5:
-                isTrigger = 0;
-                ButtonKey = XINPUT_GAMEPAD_LEFT_SHOULDER;
-                break;
-            case 6:
-                isTrigger = 0;
-                ButtonKey = XINPUT_GAMEPAD_RIGHT_SHOULDER;
-                break;
-            case 7:
-                isTrigger = 0;
-                ButtonKey = XINPUT_GAMEPAD_BACK;
-                break;
-            case 8:
-                isTrigger = 0;
-                ButtonKey = XINPUT_GAMEPAD_START;
-                break;
-            case 9:
-                isTrigger = 0;
-                ButtonKey = XINPUT_GAMEPAD_LEFT_THUMB;
-                break;
-            case 10:
-                isTrigger = 0;
-                ButtonKey = XINPUT_GAMEPAD_RIGHT_THUMB;
-                break;
-            case 11:
-                isTrigger = 1;
-                TriggerKey = state.Gamepad.bLeftTrigger;
-                break;
-            case 12:
-                isTrigger = 1;
-                TriggerKey = state.Gamepad.bRightTrigger;
-                break;
-            default:
-                isTrigger = 1;
-                TriggerKey = state.Gamepad.bRightTrigger;
-                break;
-            }
-            if (isTrigger != 1) {
-                if ((state.Gamepad.wButtons & ButtonKey) != 0)
-                    GamepadKeyPress = 1;
-                else
-                    GamepadKeyPress = 0;
-            }
-            else {
-                if (TriggerKey != 0)
-                    GamepadKeyPress = 1;
-                else
-                    GamepadKeyPress = 0;
-            }
-
-        }
-        else
-            GamepadKeyPress = 0;
+        
 
         if (RunStage == 0) { // Stage Run.
 
             ActiveCharacterAdress = GetPointerAddress(hwnd_SonicHeroesTM, SonicHeroesMainAdress, ActiveCharacterMainAdress, ActiveCharacterOffset);
             ReadProcessMemory(HandleSonicHeroes, (PBYTE*)ActiveCharacterAdress, &ActiveCharacter, sizeof(int), 0);
+
+            ReadProcessMemory(HandleSonicHeroes, (PBYTE*)0x009DD72C, &TeamBlastBar, sizeof(float), 0);
+
+            AuraAddress = GetPointerAddress(hwnd_SonicHeroesTM, SonicHeroesMainAdress, AuraMainAdress, AuraOffset);
+            ReadProcessMemory(HandleSonicHeroes, (PBYTE*)AuraAddress, &Aura, sizeof(UINT8), 0);
 
             if (ActiveCharacter == 0) { // Select Speed Character.
 
@@ -210,6 +228,29 @@ DWORD WINAPI MainCore(HMODULE hModule) {
                 ReadProcessMemory(HandleSonicHeroes, (PBYTE*)AccelerationAdress, &Acceleration, sizeof(float), 0);
 
                 if (Acceleration > 0.01f) {
+
+                    dwResult = XInputGetState(0, &state);
+                    if (dwResult == ERROR_SUCCESS) {
+                        if (isTrigger != 1) {
+                            if ((state.Gamepad.wButtons & ButtonKey) != 0)
+                                GamepadKeyPress = 1;
+                            else
+                                GamepadKeyPress = 0;
+                        }
+                        else {
+                            if (ReadKey == 11)
+                                TriggerKey = state.Gamepad.bLeftTrigger;
+                            if (ReadKey == 12)
+                                TriggerKey = state.Gamepad.bRightTrigger;
+                            if (TriggerKey != 0)
+                                GamepadKeyPress = 1;
+                            else
+                                GamepadKeyPress = 0;
+                        }
+                    }
+                    else
+                        GamepadKeyPress = 0;
+
                     TimeTick = sqrt(Acceleration / CoefficientOfX);
 
                     if (TimeTick >= TimeToMaxAcceleration) // TimeToMaxAcceleration
@@ -219,8 +260,19 @@ DWORD WINAPI MainCore(HMODULE hModule) {
 
                     Acceleration = CoefficientOfX * TimeTick * TimeTick; // y = ax^2 -- MaxAcceleration = CoefficientOfX * Time^2
 
-                    if (GetAsyncKeyState(0x43) || GamepadKeyPress)
+                    if (TeamBlastBar > 5.0f && (GetAsyncKeyState(KeyboardButtonKey) || GamepadKeyPress)) {
                         WriteProcessMemory(HandleSonicHeroes, (PBYTE*)AccelerationAdress, &Acceleration, sizeof(float), 0);
+
+                        TeamBlastBar -= 0.1f;
+                        WriteProcessMemory(HandleSonicHeroes, (PBYTE*)0x009DD72C, &TeamBlastBar, sizeof(float), 0);
+                            if (Aura != 4 && Aura != 5) {
+                                if ((Aura % 16) == 0)
+                                    Aura = Aura + 0x4;
+                                if (Aura > 0 && Aura < 4)
+                                    Aura = 0x4;
+                                WriteProcessMemory(HandleSonicHeroes, (PBYTE*)AuraAddress, &Aura, sizeof(UINT8), 0);
+                            }
+                    }
                 }
 
             }
