@@ -7,8 +7,8 @@
 #include <Xinput.h>
 #include <string>
 #include <fstream>
-#include <sstream>
 #include "framework.h"
+#include "json.hpp"
 
 #define KeyboardButtonKey 0x43
 
@@ -79,43 +79,31 @@ DWORD WINAPI MainCore(HMODULE hModule) {
     float TimeToMaxAcceleration = 2.0f;
 
     // Find DLL Location
-    std::ifstream File(GetDllPath("Sonic Heroes Boost Mod (Speed Characters).dll") + "\\Speed Character Boost Mod Config File.txt");
-    std::string Line;
+    std::ifstream File(GetDllPath("Sonic Heroes Boost Mod (Speed Characters).dll") + "\\..\\..\\User\\Mods\\sonicheroes.mechanic.boostforsh\\Config.json");
     short ReadKey = 12;
     if (!File.is_open())
         ReadKey = 12;
-    else {
-        for (int i = 0; i < 7; i++) {
-            std::getline(File, Line);
-            if (i == 1) {
-                std::stringstream ss(Line);
-                std::string Key;
-                ss >> Key >> ReadKey;
-            }
-            if (i == 2) {
-                std::stringstream ss(Line);
-                std::string Key;
-                ss >> Key >> MaxAcceleration;
-            }
-            if (i == 3) {
-                std::stringstream ss(Line);
-                std::string Key;
-                ss >> Key >> TimeToMaxAcceleration;
-            }
-        }
-        if (ReadKey <= 12 && ReadKey >= 1);
-        else
-            ReadKey = 12;
 
-        if (MaxAcceleration <= 100.0f && MaxAcceleration >= 0.5f);
-        else
-            MaxAcceleration = 20.0f;
+    nlohmann::json configData;
+    File >> configData;
 
-        if (TimeToMaxAcceleration <= 120.0f && TimeToMaxAcceleration >= 1.0f);
-        else
-            TimeToMaxAcceleration = 2.0f;
-    }
+    ReadKey = configData["Integer"];
+    MaxAcceleration = configData["Float"];
+    TimeToMaxAcceleration = configData["Float2"];
+
     File.close();
+
+    if (ReadKey <= 12 && ReadKey >= 1);
+    else
+        ReadKey = 12;
+
+    if (MaxAcceleration <= 100.0f && MaxAcceleration >= 0.5f);
+    else
+        MaxAcceleration = 20.0f;
+
+    if (TimeToMaxAcceleration <= 120.0f && TimeToMaxAcceleration >= 1.0f);
+    else
+        TimeToMaxAcceleration = 2.0f;
 
     const float CoefficientOfX = MaxAcceleration / (TimeToMaxAcceleration * TimeToMaxAcceleration); // MaxAcceleration / TimeToMaxAcceleration^2
 
