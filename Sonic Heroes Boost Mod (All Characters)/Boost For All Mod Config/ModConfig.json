@@ -1,0 +1,46 @@
+{
+  "ModId": "sonicheroes.mechanic.boostforallsh",
+  "ModName": "Boost for All SH",
+  "ModAuthor": "Yenilmez99",
+  "ModVersion": "3.1.0",
+  "ModDescription": "Adds boost feature to all characters",
+  "ModDll": "Boost For All Mod Config.dll",
+  "ModIcon": "",
+  "ModR2RManagedDll32": "x86/Boost For All Mod Config.dll",
+  "ModR2RManagedDll64": "x64/Boost For All Mod Config.dll",
+  "ModNativeDll32": "Sonic Heroes Boost Mod (All Characters).dll",
+  "ModNativeDll64": "",
+  "Tags": [],
+  "CanUnload": null,
+  "HasExports": null,
+  "IsLibrary": false,
+  "ReleaseMetadataFileName": "Boost For All Mod Config.ReleaseMetadata.json",
+  "PluginData": {
+    "GitHubDependencies": {
+      "IdToConfigMap": {
+        "reloaded.sharedlib.hooks": {
+          "Config": {
+            "UserName": "Sewer56",
+            "RepositoryName": "Reloaded.SharedLib.Hooks.ReloadedII",
+            "UseReleaseTag": true,
+            "AssetFileName": "reloaded.sharedlib.hooks.zip"
+          },
+          "ReleaseMetadataName": "Sewer56.Update.ReleaseMetadata.json"
+        }
+      }
+    },
+    "GameBanana": {
+      "ItemType": "Mod",
+      "ItemId": 536465
+    }
+  },
+  "IsUniversalMod": false,
+  "ModDependencies": [
+    "reloaded.sharedlib.hooks"
+  ],
+  "OptionalDependencies": [],
+  "SupportedAppId": [
+    "tsonic_win.exe"
+  ],
+  "ProjectUrl": ""
+}
