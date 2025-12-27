@@ -1,0 +1,15 @@
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Output\Preview.png
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Output\ModConfig.json
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Output\Boost For Sonic Heroes.deps.json
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Output\Boost For Sonic Heroes.dll
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Output\Boost For Sonic Heroes.pdb
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Boost For Sonic Heroes\obj\Release\Boost For Sonic Heroes.csproj.AssemblyReference.cache
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Boost For Sonic Heroes\obj\Release\Boost For Sonic Heroes.GeneratedMSBuildEditorConfig.editorconfig
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Boost For Sonic Heroes\obj\Release\Boost For Sonic Heroes.AssemblyInfoInputs.cache
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Boost For Sonic Heroes\obj\Release\Boost For Sonic Heroes.AssemblyInfo.cs
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Boost For Sonic Heroes\obj\Release\Boost For Sonic Heroes.csproj.CoreCompileInputs.cache
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Boost For Sonic Heroes\obj\Release\Boost Fo.5E614382.Up2Date
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Boost For Sonic Heroes\obj\Release\Boost For Sonic Heroes.dll
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Boost For Sonic Heroes\obj\Release\refint\Boost For Sonic Heroes.dll
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Boost For Sonic Heroes\obj\Release\Boost For Sonic Heroes.pdb
+D:\Test Dosyalari\kod\Sonic Heroes Boost Mod\Boost For Sonic Heroes\obj\Release\ref\Boost For Sonic Heroes.dll
