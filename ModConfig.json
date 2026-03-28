@@ -1,0 +1,28 @@
+{
+  "ModId": "sonicheroes.mechanic.boostforsh",
+  "ModName": "Boost for Sonic Heroes",
+  "ModAuthor": "Yenilmez99",
+  "ModVersion": "4.0.1",
+  "ModDescription": "Adds a boost feature to the Sonic Heroes game.",
+  "ModDll": "Boost-Mod-for-Sonic-Heroes.dll",
+  "ModIcon": "Preview.png",
+  "ModR2RManagedDll32": "x86/Boost-Mod-for-Sonic-Heroes.dll",
+  "ModR2RManagedDll64": "x64/Boost-Mod-for-Sonic-Heroes.dll",
+  "ModNativeDll32": "SonicHeroesBoostMod.dll",
+  "ModNativeDll64": "",
+  "IsLibrary": false,
+  "ReleaseMetadataFileName": "Boost_Mod_for_Sonic_Heroes.ReleaseMetadata.json",
+  "PluginData": {
+    "GameBanana": {
+      "ItemType": "Mod",
+      "ItemId": 536234
+    }
+  },
+  "IsUniversalMod": false,
+  "ModDependencies": [ "reloaded.sharedlib.hooks" ],
+  "OptionalDependencies": [],
+  "SupportedAppId": [
+    "tsonic_win.exe"
+  ],
+  "ProjectUrl": ""
+}
