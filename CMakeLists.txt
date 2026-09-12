@@ -1,45 +1,34 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.20)
 
-project("SonicHeroesBoostMod" C CXX)
-set(CMAKE_CXX_STANDARD 17)
+project(SH_boost_workspace VERSION 4.1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
 
-FetchContent_Declare(
-  json
-  GIT_REPOSITORY https://github.com/nlohmann/json.git
-  GIT_TAG        v3.11.3
-  GIT_SHALLOW    TRUE
-)
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
-set(SOURCE_FILES "src/main.cpp")
-set(OUTPUT_FOLDER "../sonicheroes.mechanic.boostforsh")
+FetchContent_Declare(
+    minhook
+    GIT_REPOSITORY https://github.com/TsudaKageyu/minhook.git
+    GIT_TAG v1.3.4
+    GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(minhook)
 
-if(NOT CMAKE_BUILD_TYPE)
-set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
-endif()
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -s")
-add_compile_options(-O3 -flto)
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flto")
-endif()
-
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
-
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    PREFIX ""
-    OUTPUT_NAME "SonicHeroesBoostMod"
-    LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_FOLDER}"
-    RUNTIME_OUTPUT_DIRECTORY "${OUTPUT_FOLDER}"
+add_library(SH_boost SHARED src/dllmain.cpp)
+set_target_properties(SH_boost PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/../sonicheroes.mechanic.boostforsh"
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(SH_boost PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(SH_boost PRIVATE minhook)
 
-if(MINGW)
-target_link_options(${PROJECT_NAME} PRIVATE "-static-libgcc" "-static-libstdc++" "-static")
-endif()
+set_target_properties(SH_boost PROPERTIES OUTPUT_NAME "SH_boost")
 
-target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
+target_include_directories(SH_boost PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+)
