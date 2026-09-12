@@ -10,11 +10,16 @@
 typedef void(__cdecl* OrginalTimer)();
 OrginalTimer OrginalTimerFunction = nullptr;
 
+typedef void(__cdecl* DashRing)(int characterNo);
+DashRing SpawnDashRing = (DashRing)0x00630A10;
+
+unsigned char FrameCounter = 0;
 float Constant = 0;
 float AddConstant = 0;
 float MultiplicationConstant = 0;
 inline Settings ConfigSettings;
 void BoostLogic() {
+    
     if (!isKeyPressed()) return;
 
     volatile uintptr_t& RoleBase = *reinterpret_cast<volatile uintptr_t*>(0x00A4C268);
@@ -39,6 +44,20 @@ void BoostLogic() {
         volatile uint8_t& TeamBlastState = *reinterpret_cast<volatile uint8_t*>(0x009DD73C);
         if (TeamBlastState == 1) TeamBlastState = 0;
 
+    }
+
+    FrameCounter++;
+    if (FrameCounter >= ConfigSettings.Boost_Rings_Frequency) {
+        FrameCounter = 0;
+
+        for (int i = 0; i < ConfigSettings.Boost_Rings_Color_Intensity; i++) {
+            SpawnDashRing(0); // for speed;
+            if (ConfigSettings.Boost_For_All) {
+                SpawnDashRing(1); // for fly;
+                SpawnDashRing(2); // for power;
+            }
+
+        }
     }
 
     Velocity += AddConstant + sqrtf(Velocity) * MultiplicationConstant;
@@ -80,7 +99,9 @@ DWORD WINAPI MainCore(LPVOID lpParam) {
     MH_EnableHook(MH_ALL_HOOKS);
 
     // Stuck Loop
-    while (!(GetAsyncKeyState(VK_F1)&0x1)) Sleep(100);
+    while (!(GetAsyncKeyState(VK_F1)&0x1)) {
+        Sleep(100);
+    }
 
     MH_DisableHook(MH_ALL_HOOKS);
     MH_Uninitialize();

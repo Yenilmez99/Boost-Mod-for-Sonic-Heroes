@@ -6,10 +6,13 @@
 #include "nlohmann/json.hpp"
 
 struct Settings {
+    int Boost_Rings_Color_Intensity = 5;
+    int Boost_Rings_Frequency = 5;
     float Maximum_Velocity = 15.0f;
     float In_How_Many_Second = 2.0f;
     bool Boost_For_All = true;
     bool Limited_Boost = false;
+    bool Boost_Rings = false; // Boost Ring frequency
 };
 
 bool inline isKeyPressed() {
@@ -35,10 +38,13 @@ inline void GetSettings(HMODULE& dllHModule, Settings& settings) {
             nlohmann::json ConfigData;
             ConfigFile >> ConfigData;
 
+            settings.Boost_Rings_Color_Intensity = ConfigData.value("Boost_Rings_Color_Intensity", 5);
+            settings.Boost_Rings_Frequency = ConfigData.value("Boost_Rings_Frequency", 5);
             settings.Maximum_Velocity = ConfigData.value("Maximum_Velocity", 15.0f);
             settings.In_How_Many_Second = ConfigData.value("In_How_Many_Second", 2.0f);
             settings.Boost_For_All = ConfigData.value("Boost_For_All", true);
             settings.Limited_Boost = ConfigData.value("Limited_Boost", false);
+            settings.Boost_Rings = ConfigData.value("Boost_Rings", false);
 
         }
         catch (const nlohmann::json::exception&) {

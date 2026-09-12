@@ -18,6 +18,11 @@ public class Config : Configurable<Config>
         [Description("The boost bar becomes active. Boost is consumed from the Team Blast bar.")]
         [DefaultValue(false)]
         public bool Limited_Boost { get; set; } = false;
+        
+        [DisplayName("Boost Rings")]
+        [Description("Visual feedback when Boost is active.")]
+        [DefaultValue(false)]
+        public bool Boost_Rings { get; set; } = false;
 
 
         [DisplayName("Max Speed")]
@@ -30,6 +35,18 @@ public class Config : Configurable<Config>
         [Description("How many seconds does it take to reach maximum speed?")]
         [DefaultValue(2.0f)]
         public float In_How_Many_Second { get; set; } = 2.0f;
+
+        
+        [DisplayName("Boost Rings Color Intensity")]
+        [Description("Color Saturation of Boost Rings (high values ​​may cause a crash)")]
+        [DefaultValue(5)]
+        public int Boost_Rings_Color_Intensity { get; set; } = 5;
+        
+
+        [DisplayName("Boost Rings Frequency")]
+        [Description("Sets how often Boost Rings appear, in frames (1 second = 60 frames in Sonic Heroes, low values ​​may cause a crash\nIt must be more than 3).")]
+        [DefaultValue(5)]
+        public int Boost_Rings_Frequency { get; set; } = 5;
 }
 
 /// <summary>
