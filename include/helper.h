@@ -17,7 +17,7 @@ struct Settings {
 
 bool inline isKeyPressed() {
     volatile uint8_t* CKey = reinterpret_cast<volatile uint8_t*>(0x00A2FA36);
-    volatile uint8_t* ControllerRightButton = reinterpret_cast<volatile uint8_t*>(0x00A2FB3A);
+    volatile uint8_t* ControllerRightButton = reinterpret_cast<volatile uint8_t*>(0x00A2FB3D);
     return (*CKey > 0 || *ControllerRightButton > 0);
 }
 
