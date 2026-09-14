@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿#if (IncludeConfig)
+using System.Diagnostics;
 
-namespace Boost_Mod_for_Sonic_Heroes.Template.Configuration;
+namespace Reloaded.Mod.Template.Template.Configuration;
 
 public class Utilities
 {
@@ -38,3 +39,4 @@ public class Utilities
         return value;
     }
 }
+#endif

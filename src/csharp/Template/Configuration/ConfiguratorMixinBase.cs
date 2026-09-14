@@ -1,7 +1,8 @@
-﻿using Reloaded.Mod.Interfaces;
-using Boost_Mod_for_Sonic_Heroes.Configuration;
+﻿#if (IncludeConfig)
+using Reloaded.Mod.Interfaces;
+using Reloaded.Mod.Template.Configuration;
 
-namespace Boost_Mod_for_Sonic_Heroes.Template.Configuration;
+namespace Reloaded.Mod.Template.Template.Configuration;
 
 /// <summary>
 /// Creates the various different configurations used by the mod.
@@ -52,3 +53,4 @@ public class ConfiguratorMixinBase
     }
     #endregion
 }
+#endif

@@ -1,6 +1,8 @@
-﻿using Boost_Mod_for_Sonic_Heroes.Configuration;
+﻿#if (IncludeConfig)
+using Reloaded.Mod.Template.Configuration;
+#endif
 
-namespace Boost_Mod_for_Sonic_Heroes.Template;
+namespace Reloaded.Mod.Template.Template;
 
 /// <summary>
 /// Base class for implementing mod functionality.
@@ -62,9 +64,11 @@ public class ModBase
         */
     }
 
+#if (IncludeConfig)
     public virtual void ConfigurationUpdated(Config configuration)
     {
         // Apply settings from configuration.
         // ... your code here.
     }
+#endif
 }

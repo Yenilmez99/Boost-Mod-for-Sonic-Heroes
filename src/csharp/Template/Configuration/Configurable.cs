@@ -1,9 +1,10 @@
-﻿using Reloaded.Mod.Interfaces;
+﻿#if (IncludeConfig)
+using Reloaded.Mod.Interfaces;
 using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Boost_Mod_for_Sonic_Heroes.Template.Configuration;
+namespace Reloaded.Mod.Template.Template.Configuration;
 
 public class Configurable<TParentType> : IUpdatableConfigurable where TParentType : Configurable<TParentType>, new()
 {
@@ -141,3 +142,4 @@ public class Configurable<TParentType> : IUpdatableConfigurable where TParentTyp
         return result;
     }
 }
+#endif

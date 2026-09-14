@@ -6,10 +6,12 @@
 using Reloaded.Hooks.ReloadedII.Interfaces;
 using Reloaded.Mod.Interfaces;
 using Reloaded.Mod.Interfaces.Internal;
-using Boost_Mod_for_Sonic_Heroes.Template.Configuration;
-using Boost_Mod_for_Sonic_Heroes.Configuration;
+#if (IncludeConfig)
+using Reloaded.Mod.Template.Template.Configuration;
+using Reloaded.Mod.Template.Configuration;
+#endif
 
-namespace Boost_Mod_for_Sonic_Heroes.Template;
+namespace Reloaded.Mod.Template.Template;
 
 public class Startup : IMod
 {
@@ -23,10 +25,12 @@ public class Startup : IMod
     /// </summary>
     private IModLoader _modLoader = null!;
 
+#if (IncludeConfig)
     /// <summary>
     /// Stores the contents of your mod's configuration. Automatically updated by template.
     /// </summary>
     private Config _configuration = null!;
+#endif
 
     /// <summary>
     /// An interface to Reloaded's the function hooks/detours library.
@@ -54,6 +58,7 @@ public class Startup : IMod
         _modConfig = (IModConfig)modConfig;
         _logger = (ILogger)_modLoader.GetLogger();
         _modLoader.GetController<IReloadedHooks>()?.TryGetTarget(out _hooks!);
+#if (IncludeConfig)
 
         // Your config file is in Config.json.
         // Need a different name, format or more configurations? Modify the `Configurator`.
@@ -63,6 +68,7 @@ public class Startup : IMod
 
         _configuration = configurator.GetConfiguration<Config>(0);
         _configuration.ConfigurationUpdated += OnConfigurationUpdated;
+#endif
 
         // Please put your mod code in the class below,
         // use this class for only interfacing with mod loader.
@@ -73,9 +79,12 @@ public class Startup : IMod
             ModLoader = _modLoader,
             ModConfig = _modConfig,
             Owner = this,
+#if (IncludeConfig)
             Configuration = _configuration,
+#endif
         });
     }
+#if (IncludeConfig)
 
     private void OnConfigurationUpdated(IConfigurable obj)
     {
@@ -89,6 +98,7 @@ public class Startup : IMod
         _mod.ConfigurationUpdated(_configuration);
     }
 
+#endif
     /* Mod loader actions. */
     public void Suspend() => _mod.Suspend();
     public void Resume() => _mod.Resume();

@@ -4,7 +4,6 @@
 #include <synchapi.h>
 #include <windows.h>
 #include <wtypesbase.h>
-#include <cmath>
 
 // Orginal Timer Function (Timer Works on stage so we need to hook it)
 typedef void(__cdecl* OrginalTimer)();
@@ -20,7 +19,7 @@ float MultiplicationConstant = 0;
 inline Settings ConfigSettings;
 void BoostLogic() {
     
-    if (!isKeyPressed()) return;
+    if (!isKeyPressed(ConfigSettings.Boost_Controller_Key)) return;
 
     volatile uintptr_t& RoleBase = *reinterpret_cast<volatile uintptr_t*>(0x00A4C268);
     volatile uint8_t& Role = *reinterpret_cast<uint8_t*>(RoleBase + 0x3B);
@@ -46,6 +45,9 @@ void BoostLogic() {
 
     }
 
+    Velocity += AddConstant + sqrtf(Velocity) * MultiplicationConstant;
+
+    if (!ConfigSettings.Boost_Rings) return;
     FrameCounter++;
     if (FrameCounter >= ConfigSettings.Boost_Rings_Frequency) {
         FrameCounter = 0;
@@ -59,8 +61,6 @@ void BoostLogic() {
 
         }
     }
-
-    Velocity += AddConstant + sqrtf(Velocity) * MultiplicationConstant;
 
     return;
 }

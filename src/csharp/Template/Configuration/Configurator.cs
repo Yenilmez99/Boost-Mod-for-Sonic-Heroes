@@ -1,7 +1,8 @@
-﻿using Reloaded.Mod.Interfaces;
-using Boost_Mod_for_Sonic_Heroes.Configuration;
+﻿#if (IncludeConfig)
+using Reloaded.Mod.Interfaces;
+using Reloaded.Mod.Template.Configuration;
 
-namespace Boost_Mod_for_Sonic_Heroes.Template.Configuration;
+namespace Reloaded.Mod.Template.Template.Configuration;
 
 public class Configurator : IConfiguratorV3
 {
@@ -95,3 +96,4 @@ public class Configurator : IConfiguratorV3
     /// </summary>
     public void SetModDirectory(string modDirectory) { ModFolder = modDirectory; }
 }
+#endif

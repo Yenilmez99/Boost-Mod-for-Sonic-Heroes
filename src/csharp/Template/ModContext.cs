@@ -1,8 +1,10 @@
 ﻿using Reloaded.Mod.Interfaces;
 using IReloadedHooks = Reloaded.Hooks.ReloadedII.Interfaces.IReloadedHooks;
-using Boost_Mod_for_Sonic_Heroes.Configuration;
+#if (IncludeConfig)
+using Reloaded.Mod.Template.Configuration;
+#endif
 
-namespace Boost_Mod_for_Sonic_Heroes.Template;
+namespace Reloaded.Mod.Template.Template;
 
 /// <summary>
 /// Represents information passed in from the mod loader template to the implementing mod.
@@ -24,11 +26,13 @@ public class ModContext
     /// </summary>
     public ILogger Logger { get; set; } = null!;
 
+#if (IncludeConfig)
     /// <summary>
     /// Provides access to this mod's configuration.
     /// </summary>
     public Config Configuration { get; set; } = null!;
 
+#endif
     /// <summary>
     /// Configuration of this mod.
     /// </summary>
